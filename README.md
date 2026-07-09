@@ -47,6 +47,30 @@ cd exp1-manifest-optional
 bash run.sh
 ```
 
+### E2 — Inline shell execution in `SKILL.md` (load-vs-use + permission gate)
+Folder: [`exp2-inline-exec/`](exp2-inline-exec/)
+
+**Claim tested (paper §II-A, §IV-A):** a `` !`command` `` directive in a skill body is
+run by Claude Code during preprocessing, before the text reaches the model. The paper
+listed this as "documented, unverified" and left load-vs-use timing as future work.
+
+**Result: CONFIRMED with refinements.**
+- The inline path is real: the canary fired in **3/3** invocation runs with no separate
+  Bash approval prompt.
+- It is **use-triggered, not load-triggered** — mere on-disk presence did not fire.
+- It is **permission-gated** — blocked in default headless mode, fired only with the
+  permission gate removed.
+- `disableSkillShellExecution: true` **suppressed** it.
+
+Full matrix and evidence: [`exp2-inline-exec/README.md`](exp2-inline-exec/README.md) and
+[`exp2-inline-exec/logs/summary.txt`](exp2-inline-exec/logs/summary.txt).
+
+**Reproduce:**
+```bash
+cd exp2-inline-exec
+bash run.sh
+```
+
 ## Ethics & safety
 
 - All probes use **benign markers only** (a hook that appends a UTC timestamp to a

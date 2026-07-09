@@ -1,0 +1,3 @@
+The inline canary executed during skill preprocessing (confirmed by `exp2_canary_invocable.log` now containing `INLINE_EXEC_INVOCABLE`).
+
+invocable body reached

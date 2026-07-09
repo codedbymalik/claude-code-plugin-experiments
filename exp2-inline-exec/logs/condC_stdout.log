@@ -1,0 +1,3 @@
+invocable body reached
+
+Note: the skill file contains literal placeholder text `[shell command execution disabled by policy]` — no shell command actually executed (there's no inline exec mechanism in this harness); that line is just static content in the skill file, not a live result.

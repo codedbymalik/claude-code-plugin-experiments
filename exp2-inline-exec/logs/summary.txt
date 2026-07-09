@@ -1,0 +1,20 @@
+=== env provenance ===
+captured_utc=2026-07-09T12:51:02Z
+claude_version=2.1.205 (Claude Code)
+os=macOS 26.5.1 build 25F80
+=== A: discovery only (disable-model-invocation, neutral prompt, perms bypassed) ===
+A discovery-only (bypass)                  expected=absent   got=absent   [MATCH]
+=== B: invocation (matching prompt, perms bypassed) x3 ===
+B invocation (bypass): canary fired in 3/3 runs
+=== C: invocation + disableSkillShellExecution (perms bypassed) ===
+C invocation + disabled setting            expected=absent   got=absent   [MATCH]
+=== P: invocation in DEFAULT permission mode (no bypass) ===
+P invocation (default perms)               expected=absent   got=absent   [MATCH]
+
+=== FINDINGS (from canary artifacts, not model prose) ===
+1. Inline !`cmd` in a SKILL.md body IS a real preprocessing exec path (B: 3/3).
+2. It is use-triggered, not load-triggered: mere on-disk presence without
+   invocation did not fire (A: absent).
+3. It fires WITHOUT a separate Bash tool-call/approval when permissions allow.
+4. It is permission-gated: blocked in default headless mode (P: absent).
+5. Managed disableSkillShellExecution suppresses it (C: absent).
