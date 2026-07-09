@@ -15,7 +15,7 @@ A probe skill whose body contains a benign inline canary
 | Condition | Setup | Prediction | Result |
 | --- | --- | --- | --- |
 | A — discovery only | skill present, `disable-model-invocation`, neutral prompt, perms bypassed | no fire | **absent (MATCH)** |
-| B — invocation ×3 | matching prompt loads skill, perms bypassed | fires | **3/3 fired** |
+| B — invocation ×3 | matching prompt loads skill, perms bypassed | fires | **3/3 fired (8/8 with replication)** |
 | C — disabled control | invocation + `--settings '{"disableSkillShellExecution":true}'` | no fire | **absent (MATCH)** |
 | P — default perms | invocation, default permission mode (no bypass) | (open) | **absent** — blocked |
 
@@ -36,6 +36,23 @@ A probe skill whose body contains a benign inline canary
 4. **The managed kill-switch works.** `disableSkillShellExecution: true` suppressed the
    canary (Condition C), matching the documented `[shell command execution disabled by
    policy]` behavior.
+
+## Replication (independent second run, higher n)
+
+The full matrix was re-run because the permission-gate result contradicts the
+documentation's "runs before Claude sees anything." The replication (`verify.sh`,
+`logs/verify_summary.txt`) used a call-health flag to discard any network-failed call
+(none occurred). Every run matched prediction:
+
+| Condition | Run 1 | Replication | Combined |
+| --- | --- | --- | --- |
+| A discovery-only | absent | absent ×2 | fires **0/3** |
+| B invocation (bypass) | present ×3 | present ×5 | fires **8/8** |
+| C disabled setting | absent | absent ×2 | fires **0/3** |
+| P default perms | absent | absent ×5 | fires **0/6+** (blocked) |
+
+The findings reproduce exactly, strengthening confidence in the permission-gate result
+that differs from the documented behavior.
 
 ## Methodological note (important)
 

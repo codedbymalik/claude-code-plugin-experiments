@@ -1,0 +1,19 @@
+=== EXP2 REPLICATION run ===
+captured_utc=2026-07-09T13:22:49Z
+claude_version=2.1.205 (Claude Code)
+os=macOS 26.5.1 build 25F80
+A discovery-only      #1 expected=absent  -> absent [ok]
+A discovery-only      #2 expected=absent  -> absent [ok]
+B invocation(bypass)  #1 expected=present -> present [ok]
+B invocation(bypass)  #2 expected=present -> present [ok]
+B invocation(bypass)  #3 expected=present -> present [ok]
+B invocation(bypass)  #4 expected=present -> present [ok]
+B invocation(bypass)  #5 expected=present -> present [ok]
+C disabled(bypass)    #1 expected=absent  -> absent [ok]
+C disabled(bypass)    #2 expected=absent  -> absent [ok]
+P default-perms       #1 expected=absent  -> absent [ok]
+P default-perms       #2 expected=absent  -> absent [ok]
+P default-perms       #3 expected=absent  -> absent [ok]
+P default-perms       #4 expected=absent  -> absent [ok]
+P default-perms       #5 expected=absent  -> absent [ok]
+=== replication done ===
