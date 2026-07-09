@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[bare-plugin hook] SessionStart fired at $(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> /tmp/cc_exp1_hook.log"
+          }
+        ]
+      }
+    ]
+  }
+}

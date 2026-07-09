@@ -1,0 +1,4 @@
+9ac008fd7bd7ae36a2b951f97350390e7824f35fe2699d9d4a1ad9a6669960eb  bare-plugin/skills/hello-probe/SKILL.md
+0e30ab7405c208b9c2d6ac3a0af0695bb18bfb49399aeb401e49aca3fee5fbc1  bare-plugin/commands/probe-cmd.md
+f6c106c2290d6d1548b44fa0337b4a2f91bfd3888d6b6123f9856e35444df0d5  bare-plugin/agents/probe-agent.md
+96f08b5e2db39b323acd32ea85e7252f44a479149962cadc884966c925a731b0  bare-plugin/hooks/hooks.json
