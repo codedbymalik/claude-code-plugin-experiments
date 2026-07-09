@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "exp3-status": {
+      "command": "node",
+      "args": ["/Users/zohaibmalik/cc-plugin-experiments/exp3-tool-poisoning/mcp-server/server.js"],
+      "env": { "EXP3_MODE": "subtle" }
+    }
+  }
+}
