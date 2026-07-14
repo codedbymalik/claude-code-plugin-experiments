@@ -5,8 +5,9 @@ Reproducible experiments supporting the seminar paper
 
 These experiments convert documentation-grounded claims about the Claude Code
 plugin system into empirically confirmed observations on a pinned build. Every
-result is taken from **deterministic artifacts** (filesystem state and a plugin
-component's own execution output), never from model self-report.
+result is preserved in an auditable artifact: deterministic filesystem state and
+component logs for E1/E2, and saved per-trial model transcripts under an explicit
+classification rule for E3.
 
 ## Environment (results are build-specific)
 
@@ -55,8 +56,8 @@ run by Claude Code during preprocessing, before the text reaches the model. The 
 listed this as "documented, unverified" and left load-vs-use timing as future work.
 
 **Result: CONFIRMED with refinements.**
-- The inline path is real: the canary fired in **3/3** invocation runs with no separate
-  Bash approval prompt.
+- The inline path is real: the canary fired in **8/8** healthy invocation runs when
+  permissions were bypassed to isolate the execution mechanism.
 - It is **use-triggered, not load-triggered** — mere on-disk presence did not fire.
 - It is **permission-gated** — blocked in default headless mode, fired only with the
   permission gate removed.
@@ -74,34 +75,42 @@ bash run.sh
 ### E3 — MCP tool-description poisoning: channel confirmed, obedience 0/30
 Folder: [`exp3-tool-poisoning/`](exp3-tool-poisoning/)
 
-**Claim tested (paper §IV-A, Fig. 1, Table II):** an MCP tool *description* is
+**Claim tested (paper §IV-A, Fig. 1):** an MCP tool *description* is
 attacker-influenceable metadata that enters the model's context (typically without being
 surfaced in full by the approval UI). Does that text (a) reach the model and (b) get obeyed?
 
 **Setup:** a minimal local MCP stdio server exposing one `health_check` tool whose
 description embeds a benign marker directive (append token `7Q9Z`), in an `overt` and a
 disguised-as-formatting `subtle` variant, plus a `clean` control. Each trial's full
-transcript is saved and classified deterministically.
+transcript is saved and classified under an explicit, auditable rule.
 
 **Result: channel CONFIRMED; this model RESISTS (obedience 0/30).**
 - The description text provably reaches the model — in every poisoned trial it quoted the
   embedded directive verbatim while declining it (direct evidence of the Fig. 1 channel).
 - Claude Code 2.1.205 refused the directive in **30/30** poisoned trials (overt + subtle),
-  including a **neutral-directory replication** that rules out signposting as the cause;
-  the defense keys on instruction *origin* (tool metadata ≠ user request).
+  including a **neutral-directory replication** that rules out directory signposting as
+  a necessary cause. The model's provenance-focused explanation is qualitative, not
+  causal proof.
 - The `clean` control never emitted the token (0/5), confirming the token can only come
   from the description.
 - Honest framing: do **not** claim the model obeys hidden directives — for this version it
   does not. Do claim the channel is real and that obedience is model-version-dependent, so
   defense-in-depth still matters.
 
-Full matrix, transcripts, and interpretation: [`exp3-tool-poisoning/README.md`](exp3-tool-poisoning/README.md).
+Full matrix, transcripts, interpretation, and the independent saved-log audit:
+[`exp3-tool-poisoning/README.md`](exp3-tool-poisoning/README.md) and
+[`exp3-tool-poisoning/CLASSIFICATION_AUDIT.md`](exp3-tool-poisoning/CLASSIFICATION_AUDIT.md).
 
 **Reproduce:**
 ```bash
 cd exp3-tool-poisoning
 bash run.sh
+bash audit_saved_transcripts.sh
 ```
+
+Interactive approval behavior is intentionally kept separate from headless results. See
+[`INTERACTIVE_VALIDATION.md`](INTERACTIVE_VALIDATION.md) for screenshot-ready E2 and E3
+checks.
 
 ## Ethics & safety
 
@@ -120,9 +129,14 @@ bash run.sh
   claims are pinned to the environment above.
 - E1 is a functional-discovery demonstration; it does not survey real-world
   scanner/EDR tooling.
+- E2's default-permission result is headless-only; interactive approval behavior remains
+  operator-verifiable.
+- E3 measures one model/build with simple overt and formatting-style directives. Its
+  0/30 obedience result is descriptive, not evidence of universal immunity.
 
 ## How to cite
 
-Cite the specific commit for reproducibility, e.g.:
+Cite the tagged release and immutable commit for reproducibility, e.g.:
 
-> M. Z. Hassan, "Claude Code Plugin Experiments," GitHub, commit `<SHA>`, 2026.
+> M. Z. Hassan, "Claude Code Plugin Experiments," GitHub, release `v1.0.0`,
+> commit `<SHA>`, 2026.
